@@ -1,11 +1,19 @@
+import { BadRequestException } from '@nestjs/common';
 import { BaseCreditCard } from './baseCreditCard.service';
 
 export class VisaCreditCard extends BaseCreditCard {
   protected validateCardNumber(cardNumber: string): void {
-    throw new Error(`Method not implemented | Error in: ${cardNumber}`);
+    if (!cardNumber.startsWith('4')) {
+      throw new BadRequestException('Número do cartão Visa inválido');
+    }
   }
 
   protected validateCvv(cvv: string): boolean {
-    throw new Error(`Method not implemented | Error in: ${cvv}`);
+    if (cvv?.length !== 3) {
+      throw new BadRequestException(
+        'CVV invalido para Visa. CVV deve ter três dígitos',
+      );
+    }
+    return true;
   }
 }
